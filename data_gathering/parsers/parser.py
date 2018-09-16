@@ -2,10 +2,13 @@ import abc
 
 
 class Parser(object):
+    class IncorrectFormat(Exception):
+        pass
+
     """Abstract class for data parsing to exact attributes (fields)"""
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, fields):
+    def __init__(self, fields=[]):
         self.fields = fields
         self.fields_set = set(fields)
 

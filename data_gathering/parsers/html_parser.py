@@ -27,6 +27,21 @@ class AuthorListHtmlParser(Parser):
 class AuthorInfoHtmlParser(Parser):
 
     def parseDate(self, d):
+        def getMonth(month):
+            months = {'января': 1,
+                'февраля': 2,
+                'марта': 3,
+                'апреля': 4,
+                'мая': 5,
+                'июня': 6,
+                'июля': 7,
+                'августа': 8,
+                'сентября': 9,
+                'октября': 10,
+                'ноября': 11,
+                'декабря': 12}
+            return months[month] if month in months else 1
+
         date, place = '', ''
         if d:
             splitted = list(map(str.strip, d.split(',', 1)))
@@ -39,34 +54,8 @@ class AuthorInfoHtmlParser(Parser):
             m = re.fullmatch(r"(\d{1,2})?\s*(\w*)\s*(\d{4}).*", date)
             if m:
                 day = int(m.group(1)) if m.group(1) else 1
-                month = m.group(2)
-                if month == 'января':
-                    month = 1
-                elif month == 'февраля':
-                    month = 2
-                elif month == 'марта':
-                    month = 3
-                elif month == 'апреля':
-                    month = 4
-                elif month == 'мая':
-                    month = 5
-                elif month == 'июня':
-                    month = 6
-                elif month == 'июля':
-                    month = 7
-                elif month == 'августа':
-                    month = 8
-                elif month == 'сентября':
-                    month = 9
-                elif month == 'октября':
-                    month = 10
-                elif month == 'ноября':
-                    month = 11
-                elif month == 'декабря':
-                    month = 12
-                else:
-                    month = 1
-
+                month = getMonth(m.group(2))
+            
                 year = int(m.group(3))
                 date = dt.date(day=day, month=month, year=year)
             else:
@@ -74,34 +63,7 @@ class AuthorInfoHtmlParser(Parser):
                 m = re.fullmatch(r"(\d{1,2})?\s*(\w*).*", date)
                 if m:
                     day = int(m.group(1)) if m.group(1) else 1
-                    month = m.group(2)
-                    if month == 'января':
-                        month = 1
-                    elif month == 'февраля':
-                        month = 2
-                    elif month == 'марта':
-                        month = 3
-                    elif month == 'апреля':
-                        month = 4
-                    elif month == 'мая':
-                        month = 5
-                    elif month == 'июня':
-                        month = 6
-                    elif month == 'июля':
-                        month = 7
-                    elif month == 'августа':
-                        month = 8
-                    elif month == 'сентября':
-                        month = 9
-                    elif month == 'октября':
-                        month = 10
-                    elif month == 'ноября':
-                        month = 11
-                    elif month == 'декабря':
-                        month = 12
-                    else:
-                        month = 1
-
+                    month = getMonth(m.group(2))
                     year = 2000  # default year
                     date = dt.date(day=day, month=month, year=year)
                 else:

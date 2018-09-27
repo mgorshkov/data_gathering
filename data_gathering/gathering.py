@@ -1,13 +1,15 @@
 """
 Data gathering task
 
-Gather author data from https://livelib.ru:
+Собирает данные по авторам книг с https://livelib.ru и считает по ним статистики
+
+Собрать данные:
 python gathering.py gather
 
-Transform to tsv format:
+Преобразовать в формат tsv:
 python gathering.py transform
 
-Calculate some statistics:
+Посчитать статистики:
 python gathering.py stats
 
 """
@@ -72,6 +74,7 @@ def stats_of_data():
     print(dataframe.describe())
     dataframe.info()
 
+    # Найти автора с максимальной продолжительностью жизни
     dataframe['lifespan'] = dataframe.apply(
         lambda x: 0 if x['death_date'] == "nan" or x['birth_date'] == "nan"
         else x['death_date'] - x['birth_date'], axis=1)
@@ -79,13 +82,13 @@ def stats_of_data():
     dataframeSorted = dataframe.iloc[values].tail(1)
     lifespan = dataframeSorted.lifespan.tolist()[0]
     dataframe.drop('lifespan', 1)
-    # longest lifespan
+    
     writer = dataframeSorted.name.tolist()[0]
     print("longest lifespan: {lifespan} days by writer {writer}".format(
         lifespan=lifespan,
         writer=writer))
 
-    # maximum books written
+    # Найти автора, написавшего максимальное количество книг
     values = np.argsort(dataframe.num_books).values
     dataframeSorted = dataframe.iloc[values].tail(1)
     maximumBooks = dataframeSorted.num_books.tolist()[0]
@@ -94,7 +97,7 @@ def stats_of_data():
         maximumBooks=maximumBooks,
         writer=writer))
 
-    # average adepts
+    # Найти среднее число почитателей по всем авторам
     avgAdepts = dataframe.mean().adepts
     print("average adepts:", avgAdepts)
 

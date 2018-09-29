@@ -57,7 +57,11 @@ class AuthorInfoHtmlParser(Parser):
                 month = getMonth(m.group(2))
             
                 year = int(m.group(3))
-                date = dt.date(day=day, month=month, year=year)
+                try:
+                    date = dt.date(day=day, month=month, year=year)
+                except ValueError:
+                    place = date
+                    date = ''
             else:
                 # 14 января
                 m = re.fullmatch(r"(\d{1,2})?\s*(\w*).*", date)
@@ -65,7 +69,11 @@ class AuthorInfoHtmlParser(Parser):
                     day = int(m.group(1)) if m.group(1) else 1
                     month = getMonth(m.group(2))
                     year = 2000  # default year
-                    date = dt.date(day=day, month=month, year=year)
+                    try:
+                        date = dt.date(day=day, month=month, year=year)
+                    except ValueError:
+                        place = date
+                        date = ''
                 else:
                     place = date
                     date = ''
